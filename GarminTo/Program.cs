@@ -24,26 +24,33 @@ namespace GarminTo
         /// <param name="args">Args for the GarminTo application</param>
         public static void Main(string[] args)
         {
-            /* process input file (either single file or directory) into list of FileInfo */
-            var inputFiles = Program.GetInputFiles(args[0]);
-
-            /* process export options */
-            var exportOptions = args.ToList();
-            exportOptions.RemoveAt(0);            
-            
-            /* for each export option determine what type of option 
-             *              and then run the process over that option */
-            foreach (var exportOption in exportOptions)
+            if (args.Length < 2)
             {
-                var googleMapsMatch = googleMapsRegex.Match(exportOption);
-                var sqlMatch = sqlRegex.Match(exportOption);
-                var excel2013Match = excel2013Regex.Match(exportOption);
+                Program.ShowUsageMessage();
+            }
+            else
+            {
+                /* process input file (either single file or directory) into list of FileInfo */
+                var inputFiles = Program.GetInputFiles(args[0]);
 
-                if (googleMapsMatch.Success) { Processor.ToGoogleMaps(inputFiles, googleMapsMatch); }
+                /* process export options */
+                var exportOptions = args.ToList();
+                exportOptions.RemoveAt(0);
 
-                if (sqlMatch.Success) { Processor.ToSql(inputFiles, sqlMatch); }
+                /* for each export option determine what type of option 
+                 *              and then run the process over that option */
+                foreach (var exportOption in exportOptions)
+                {
+                    var googleMapsMatch = googleMapsRegex.Match(exportOption);
+                    var sqlMatch = sqlRegex.Match(exportOption);
+                    var excel2013Match = excel2013Regex.Match(exportOption);
 
-                if (excel2013Match.Success) { Processor.ToExcel2013(inputFiles, excel2013Match); }
+                    if (googleMapsMatch.Success) { Processor.ToGoogleMaps(inputFiles, googleMapsMatch); }
+
+                    if (sqlMatch.Success) { Processor.ToSql(inputFiles, sqlMatch); }
+
+                    if (excel2013Match.Success) { Processor.ToExcel2013(inputFiles, excel2013Match); }
+                }
             }
 
             System.Console.WriteLine("Press any key to close ... ");

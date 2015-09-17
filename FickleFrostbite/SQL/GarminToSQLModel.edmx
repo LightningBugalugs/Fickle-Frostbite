@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="GarminToSqlModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Activity">
+          <Key>
+            <PropertyRef Name="ActivityId" />
+          </Key>
+          <Property Name="ActivityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TcxActivityId" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Sport" Type="nvarchar" MaxLength="350" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'GarminToSql.dbo.DatabaseVersion' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="DatabaseVersion">
+          <Key>
+            <PropertyRef Name="VersionNumber" />
+            <PropertyRef Name="LastUpdated" />
+            <PropertyRef Name="SchemaUpdatedBy" />
+          </Key>
+          <Property Name="VersionNumber" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="LastUpdated" Type="datetime" Nullable="false" />
+          <Property Name="SchemaUpdatedBy" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'GarminToSql.dbo.DatabaseVersion_Log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="DatabaseVersion_Log">
+          <Key>
+            <PropertyRef Name="LogTimestamp" />
+            <PropertyRef Name="VersionNumber" />
+            <PropertyRef Name="LastUpdated" />
+            <PropertyRef Name="SchemaUpdatedBy" />
+          </Key>
+          <Property Name="LogTimestamp" Type="datetime" Nullable="false" />
+          <Property Name="VersionNumber" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="LastUpdated" Type="datetime" Nullable="false" />
+          <Property Name="SchemaUpdatedBy" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Lap">
+          <Key>
+            <PropertyRef Name="LapId" />
+          </Key>
+          <Property Name="LapId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ActivityId" Type="int" Nullable="false" />
+          <Property Name="StartTime" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="TotalTimeSeconds" Type="decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="DistanceMeters" Type="decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="Calories" Type="int" Nullable="false" />
+          <Property Name="AverageHeartRateBpm" Type="int" />
+          <Property Name="MaximumHeartRateBpm" Type="int" />
+        </EntityType>
+        <EntityType Name="Trackpoint">
+          <Key>
+            <PropertyRef Name="TrackpointId" />
+          </Key>
+          <Property Name="TrackpointId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LapId" Type="int" Nullable="false" />
+          <Property Name="Time" Type="datetime" Nullable="false" />
+          <Property Name="LatitudeDegrees" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="LongitudeDegrees" Type="decimal" Precision="18" Scale="5" />
+          <Property Name="AltitudeMeters" Type="decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="DistanceMeters" Type="decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="HeartRateBpm" Type="int" />
+        </EntityType>
+        <Association Name="FK_Lap_Activity">
+          <End Role="Activity" Type="Self.Activity" Multiplicity="1" />
+          <End Role="Lap" Type="Self.Lap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="ActivityId" />
+            </Principal>
+            <Dependent Role="Lap">
+              <PropertyRef Name="ActivityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Trackpoint_Lap">
+          <End Role="Lap" Type="Self.Lap" Multiplicity="1" />
+          <End Role="Trackpoint" Type="Self.Trackpoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lap">
+              <PropertyRef Name="LapId" />
+            </Principal>
+            <Dependent Role="Trackpoint">
+              <PropertyRef Name="LapId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GarminToSqlModelStoreContainer">
+          <EntitySet Name="Activity" EntityType="Self.Activity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lap" EntityType="Self.Lap" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Trackpoint" EntityType="Self.Trackpoint" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DatabaseVersion" EntityType="Self.DatabaseVersion" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [DatabaseVersion].[VersionNumber] AS [VersionNumber], 
+    [DatabaseVersion].[LastUpdated] AS [LastUpdated], 
+    [DatabaseVersion].[SchemaUpdatedBy] AS [SchemaUpdatedBy]
+    FROM [dbo].[DatabaseVersion] AS [DatabaseVersion]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="DatabaseVersion_Log" EntityType="Self.DatabaseVersion_Log" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [DatabaseVersion_Log].[LogTimestamp] AS [LogTimestamp], 
+    [DatabaseVersion_Log].[VersionNumber] AS [VersionNumber], 
+    [DatabaseVersion_Log].[LastUpdated] AS [LastUpdated], 
+    [DatabaseVersion_Log].[SchemaUpdatedBy] AS [SchemaUpdatedBy]
+    FROM [dbo].[DatabaseVersion_Log] AS [DatabaseVersion_Log]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Lap_Activity" Association="Self.FK_Lap_Activity">
+            <End Role="Activity" EntitySet="Activity" />
+            <End Role="Lap" EntitySet="Lap" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Trackpoint_Lap" Association="Self.FK_Trackpoint_Lap">
+            <End Role="Lap" EntitySet="Lap" />
+            <End Role="Trackpoint" EntitySet="Trackpoint" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GarminToSqlModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Activity">
+          <Key>
+            <PropertyRef Name="ActivityId" />
+          </Key>
+          <Property Name="ActivityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TcxActivityId" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Sport" Type="String" MaxLength="350" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Laps" Relationship="Self.FK_Lap_Activity" FromRole="Activity" ToRole="Lap" />
+        </EntityType>
+        <EntityType Name="Lap">
+          <Key>
+            <PropertyRef Name="LapId" />
+          </Key>
+          <Property Name="LapId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActivityId" Type="Int32" Nullable="false" />
+          <Property Name="StartTime" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TotalTimeSeconds" Type="Decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="DistanceMeters" Type="Decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="Calories" Type="Int32" Nullable="false" />
+          <Property Name="AverageHeartRateBpm" Type="Int32" />
+          <Property Name="MaximumHeartRateBpm" Type="Int32" />
+          <NavigationProperty Name="Activity" Relationship="Self.FK_Lap_Activity" FromRole="Lap" ToRole="Activity" />
+          <NavigationProperty Name="Trackpoints" Relationship="Self.FK_Trackpoint_Lap" FromRole="Lap" ToRole="Trackpoint" />
+        </EntityType>
+        <EntityType Name="Trackpoint">
+          <Key>
+            <PropertyRef Name="TrackpointId" />
+          </Key>
+          <Property Name="TrackpointId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LapId" Type="Int32" Nullable="false" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LatitudeDegrees" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="LongitudeDegrees" Type="Decimal" Precision="18" Scale="5" />
+          <Property Name="AltitudeMeters" Type="Decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="DistanceMeters" Type="Decimal" Precision="18" Scale="5" Nullable="false" />
+          <Property Name="HeartRateBpm" Type="Int32" />
+          <NavigationProperty Name="Lap" Relationship="Self.FK_Trackpoint_Lap" FromRole="Trackpoint" ToRole="Lap" />
+        </EntityType>
+        <EntityType Name="DatabaseVersion">
+          <Key>
+            <PropertyRef Name="VersionNumber" />
+            <PropertyRef Name="LastUpdated" />
+            <PropertyRef Name="SchemaUpdatedBy" />
+          </Key>
+          <Property Name="VersionNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SchemaUpdatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DatabaseVersion_Log">
+          <Key>
+            <PropertyRef Name="LogTimestamp" />
+            <PropertyRef Name="VersionNumber" />
+            <PropertyRef Name="LastUpdated" />
+            <PropertyRef Name="SchemaUpdatedBy" />
+          </Key>
+          <Property Name="LogTimestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="VersionNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SchemaUpdatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Lap_Activity">
+          <End Role="Activity" Type="Self.Activity" Multiplicity="1" />
+          <End Role="Lap" Type="Self.Lap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Activity">
+              <PropertyRef Name="ActivityId" />
+            </Principal>
+            <Dependent Role="Lap">
+              <PropertyRef Name="ActivityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Trackpoint_Lap">
+          <End Role="Lap" Type="Self.Lap" Multiplicity="1" />
+          <End Role="Trackpoint" Type="Self.Trackpoint" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lap">
+              <PropertyRef Name="LapId" />
+            </Principal>
+            <Dependent Role="Trackpoint">
+              <PropertyRef Name="LapId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GarminToSqlEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Activities" EntityType="Self.Activity" />
+          <EntitySet Name="Laps" EntityType="Self.Lap" />
+          <EntitySet Name="Trackpoints" EntityType="Self.Trackpoint" />
+          <EntitySet Name="DatabaseVersions" EntityType="Self.DatabaseVersion" />
+          <EntitySet Name="DatabaseVersion_Log" EntityType="Self.DatabaseVersion_Log" />
+          <AssociationSet Name="FK_Lap_Activity" Association="Self.FK_Lap_Activity">
+            <End Role="Activity" EntitySet="Activities" />
+            <End Role="Lap" EntitySet="Laps" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Trackpoint_Lap" Association="Self.FK_Trackpoint_Lap">
+            <End Role="Lap" EntitySet="Laps" />
+            <End Role="Trackpoint" EntitySet="Trackpoints" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GarminToSqlModelStoreContainer" CdmEntityContainer="GarminToSqlEntities">
+          <EntitySetMapping Name="Activities">
+            <EntityTypeMapping TypeName="GarminToSqlModel.Activity">
+              <MappingFragment StoreEntitySet="Activity">
+                <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
+                <ScalarProperty Name="TcxActivityId" ColumnName="TcxActivityId" />
+                <ScalarProperty Name="Sport" ColumnName="Sport" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Laps">
+            <EntityTypeMapping TypeName="GarminToSqlModel.Lap">
+              <MappingFragment StoreEntitySet="Lap">
+                <ScalarProperty Name="LapId" ColumnName="LapId" />
+                <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="TotalTimeSeconds" ColumnName="TotalTimeSeconds" />
+                <ScalarProperty Name="DistanceMeters" ColumnName="DistanceMeters" />
+                <ScalarProperty Name="Calories" ColumnName="Calories" />
+                <ScalarProperty Name="AverageHeartRateBpm" ColumnName="AverageHeartRateBpm" />
+                <ScalarProperty Name="MaximumHeartRateBpm" ColumnName="MaximumHeartRateBpm" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Trackpoints">
+            <EntityTypeMapping TypeName="GarminToSqlModel.Trackpoint">
+              <MappingFragment StoreEntitySet="Trackpoint">
+                <ScalarProperty Name="TrackpointId" ColumnName="TrackpointId" />
+                <ScalarProperty Name="LapId" ColumnName="LapId" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="LatitudeDegrees" ColumnName="LatitudeDegrees" />
+                <ScalarProperty Name="LongitudeDegrees" ColumnName="LongitudeDegrees" />
+                <ScalarProperty Name="AltitudeMeters" ColumnName="AltitudeMeters" />
+                <ScalarProperty Name="DistanceMeters" ColumnName="DistanceMeters" />
+                <ScalarProperty Name="HeartRateBpm" ColumnName="HeartRateBpm" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DatabaseVersions">
+            <EntityTypeMapping TypeName="GarminToSqlModel.DatabaseVersion">
+              <MappingFragment StoreEntitySet="DatabaseVersion">
+                <ScalarProperty Name="VersionNumber" ColumnName="VersionNumber" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="SchemaUpdatedBy" ColumnName="SchemaUpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DatabaseVersion_Log">
+            <EntityTypeMapping TypeName="GarminToSqlModel.DatabaseVersion_Log">
+              <MappingFragment StoreEntitySet="DatabaseVersion_Log">
+                <ScalarProperty Name="LogTimestamp" ColumnName="LogTimestamp" />
+                <ScalarProperty Name="VersionNumber" ColumnName="VersionNumber" />
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="SchemaUpdatedBy" ColumnName="SchemaUpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -57,9 +57,16 @@ namespace GarminTo
                         var mapPoints = activity.ToMapPoints();
 
                         /* create google map file */
-                        var outputFilePath = exportDirectory.FullName + "\\" + activity.Id.Replace(":", "-") + ".htm";
-                        var outputFile = new MapFile(outputFilePath);
-                        outputFile.GenerateMap(mapPoints);
+                        if (mapPoints.Count == 0)
+                        {
+                            Console.WriteLine("             " + activityIndex + " contains no GPS data, no Google map created.");
+                        }
+                        else
+                        {
+                            var outputFilePath = exportDirectory.FullName + "\\" + activity.Id.Replace(":", "-") + ".htm";
+                            var outputFile = new MapFile(outputFilePath);
+                            outputFile.GenerateMap(mapPoints);
+                        }
                     }
                 }
 
@@ -113,7 +120,7 @@ namespace GarminTo
                     var trainingCenterDatabase = FickleFrostbite.TCX.TrainingCenterDatabase.ReadFromFile(inputFile.FullName);
 
                     /* transfer data from trainingCenterDatabase to sql database */
-                    var garminToSqlConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["GarminToSqlEntities"].ConnectionString.Replace("{ServerName}", serverName).Replace("{Username}", username).Replace("{Password}", password);
+                    var garminToSqlConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["GarminToSqlEntities"].ConnectionString.Replace("{ServerName}", serverName).Replace("{DatabaseName}", databaseName).Replace("{Username}", username).Replace("{Password}", password);
                     var activityIndex = 0;
                     foreach (var activity in trainingCenterDatabase.Activities)
                     {

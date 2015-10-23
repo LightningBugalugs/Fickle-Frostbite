@@ -31,10 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
-      <HintPath>..\..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -95,11 +95,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <None Include="packages.config" />
     <EntityDeploy Include="SQL\GarminToSQLModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>GarminToSQLModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="packages.config" />
     <None Include="SQL\GarminToSQLModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>GarminToSQLModel.edmx</DependentUpon>

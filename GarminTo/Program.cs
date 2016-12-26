@@ -32,12 +32,93 @@ namespace GarminTo
 
         static void OnMesg(object sender, MesgEventArgs e)
         {
+            // important items
+            //      
+
+            /* *
+                OnMesg: Received Mesg with global ID#101, its name is Length
+	                Field0 Index0 ("Timestamp" Field#253) Value: 4294967295 (raw value 4294967295)
+	                Field1 Index0 ("StartTime" Field#2) Value: 820537806 (raw value 820537806)
+	                Field2 Index0 ("TotalElapsedTime" Field#3) Value: 70.375 (raw value 70375)
+	                Field3 Index0 ("TotalTimerTime" Field#4) Value: 70.375 (raw value 70375)
+	                Field4 Index0 ("MessageIndex" Field#254) Value: 3 (raw value 3)
+	                Field5 Index0 ("TotalStrokes" Field#5) Value: 28 (raw value 28)
+	                Field6 Index0 ("AvgSpeed" Field#6) Value: 0.71 (raw value 710)
+	                Field7 Index0 ("TotalCalories" Field#11) Value: 15 (raw value 15)
+	                Field8 Index0 ("Event" Field#0) Value: 28 (raw value 28)
+	                Field9 Index0 ("EventType" Field#1) Value: 1 (raw value 1)
+	                Field10 Index0 ("SwimStroke" Field#7) Value: 0 (raw value 0)
+	                Field11 Index0 ("AvgSwimmingCadence" Field#9) Value: 24 (raw value 24)
+	                Field12 Index0 ("EventGroup" Field#10) Value: 255 (raw value 255)
+	                Field13 Index0 ("LengthType" Field#12) Value: 1 (raw value 1)
+             * */
+            /* *
+                OnMesg: Received Mesg with global ID#18, its name is Session
+	                Field0 Index0 ("Timestamp" Field#253) Value: 820540407 (raw value 820540407)
+	                Field1 Index0 ("StartTime" Field#2) Value: 820537603 (raw value 820537603)
+	                Field2 Index0 ("StartPositionLat" Field#3) Value: 2147483647 (raw value 2147483647)
+	                Field3 Index0 ("StartPositionLong" Field#4) Value: 2147483647 (raw value 2147483647)
+	                Field4 Index0 ("TotalElapsedTime" Field#7) Value: 2793.562 (raw value 2793562)
+	                Field5 Index0 ("TotalTimerTime" Field#8) Value: 2793.562 (raw value 2793562)
+	                Field6 Index0 ("TotalDistance" Field#9) Value: 2000 (raw value 200000)
+	                Field7 Index0 ("TotalCycles" Field#10) Value: 1151 (raw value 1151)
+	                Field8 Index0 ("NecLat" Field#29) Value: 2147483647 (raw value 2147483647)
+	                Field9 Index0 ("NecLong" Field#30) Value: 2147483647 (raw value 2147483647)
+	                Field10 Index0 ("SwcLat" Field#31) Value: 2147483647 (raw value 2147483647)
+	                Field11 Index0 ("SwcLong" Field#32) Value: 2147483647 (raw value 2147483647)
+	                Field12 Index0 ("unknown" Field#38) Value: 2147483647 (raw value 2147483647)
+	                Field13 Index0 ("unknown" Field#39) Value: 2147483647 (raw value 2147483647)
+	                Field14 Index0 ("AvgStrokeCount" Field#41) Value: 28.8 (raw value 288)
+	                Field15 Index0 ("TotalWork" Field#48) Value: 4294967295 (raw value 4294967295)
+	                Field16 Index0 ("TimeInPowerZone" Field#68) Value: 4294968 (raw value 4294967295)
+	                Field17 Index0 ("MessageIndex" Field#254) Value: 0 (raw value 0)
+	                Field18 Index0 ("TotalCalories" Field#11) Value: 606 (raw value 606)
+	                Field19 Index0 ("TotalFatCalories" Field#13) Value: 0 (raw value 0)
+	                Field20 Index0 ("AvgSpeed" Field#14) Value: 0.718 (raw value 718)
+	                Field21 Index0 ("MaxSpeed" Field#15) Value: 0.83 (raw value 830)
+	                Field22 Index0 ("AvgPower" Field#20) Value: 65535 (raw value 65535)
+	                Field23 Index0 ("MaxPower" Field#21) Value: 65535 (raw value 65535)
+	                Field24 Index0 ("TotalAscent" Field#22) Value: 65535 (raw value 65535)
+	                Field25 Index0 ("TotalDescent" Field#23) Value: 65535 (raw value 65535)
+	                Field26 Index0 ("FirstLapIndex" Field#25) Value: 0 (raw value 0)
+	                Field27 Index0 ("NumLaps" Field#26) Value: 1 (raw value 1)
+	                Field28 Index0 ("unknown" Field#33) Value: 40 (raw value 40)
+	                Field29 Index0 ("NormalizedPower" Field#34) Value: 65535 (raw value 65535)
+	                Field30 Index0 ("TrainingStressScore" Field#35) Value: 6553.5 (raw value 65535)
+	                Field31 Index0 ("IntensityFactor" Field#36) Value: 65.535 (raw value 65535)
+	                Field32 Index0 ("LeftRightBalance" Field#37) Value: 65535 (raw value 65535)
+	                Field33 Index0 ("AvgStrokeDistance" Field#42) Value: 1.74 (raw value 174)
+	                Field34 Index0 ("PoolLength" Field#44) Value: 50 (raw value 5000)
+	                Field35 Index0 ("ThresholdPower" Field#45) Value: 65535 (raw value 65535)
+	                Field36 Index0 ("NumActiveLengths" Field#47) Value: 40 (raw value 40)
+	                Field37 Index0 ("Event" Field#0) Value: 9 (raw value 9)
+	                Field38 Index0 ("EventType" Field#1) Value: 1 (raw value 1)
+	                Field39 Index0 ("Sport" Field#5) Value: 5 (raw value 5)
+	                Field40 Index0 ("SubSport" Field#6) Value: 17 (raw value 17)
+	                Field41 Index0 ("AvgHeartRate" Field#16) Value: 255 (raw value 255)
+	                Field42 Index0 ("MaxHeartRate" Field#17) Value: 255 (raw value 255)
+	                Field43 Index0 ("AvgCadence" Field#18) Value: 25 (raw value 25)
+	                Field44 Index0 ("MaxCadence" Field#19) Value: 26 (raw value 26)
+	                Field45 Index0 ("TotalTrainingEffect" Field#24) Value: 25.5 (raw value 255)
+	                Field46 Index0 ("EventGroup" Field#27) Value: 255 (raw value 255)
+	                Field47 Index0 ("Trigger" Field#28) Value: 0 (raw value 0)
+	                Field48 Index0 ("SwimStroke" Field#43) Value: 0 (raw value 0)
+	                Field49 Index0 ("PoolLengthUnit" Field#46) Value: 0 (raw value 0)
+	                Field50 Index0 ("EnhancedAvgSpeed" Field#124) Value: 0.718 (raw value 718)
+	                Field51 Index0 ("EnhancedMaxSpeed" Field#125) Value: 0.83 (raw value 830)
+             * */
+
+            var filename = @"D:\temp\fit-files\message.txt";
+            System.IO.File.AppendAllText(filename, System.Environment.NewLine);
+            System.IO.File.AppendAllText(filename, String.Format("OnMesg: Received Mesg with global ID#{0}, its name is {1}", e.mesg.Num, e.mesg.Name));
             Console.WriteLine("OnMesg: Received Mesg with global ID#{0}, its name is {1}", e.mesg.Num, e.mesg.Name);
 
             for (byte i = 0; i < e.mesg.GetNumFields(); i++)
             {
                 for (int j = 0; j < e.mesg.fields[i].GetNumValues(); j++)
                 {
+                    System.IO.File.AppendAllText(filename, System.Environment.NewLine);
+                    System.IO.File.AppendAllText(filename, String.Format("\tField{0} Index{1} (\"{2}\" Field#{4}) Value: {3} (raw value {5})", i, j, e.mesg.fields[i].GetName(), e.mesg.fields[i].GetValue(j), e.mesg.fields[i].Num, e.mesg.fields[i].GetRawValue(j)));
                     Console.WriteLine("\tField{0} Index{1} (\"{2}\" Field#{4}) Value: {3} (raw value {5})", i, j, e.mesg.fields[i].GetName(), e.mesg.fields[i].GetValue(j), e.mesg.fields[i].Num, e.mesg.fields[i].GetRawValue(j));
                 }
             }
@@ -50,6 +131,8 @@ namespace GarminTo
             {
                 mesgCounts.Add(e.mesg.Num, 1);
             }
+
+            System.IO.File.AppendAllText(filename, System.Environment.NewLine);
         }
 
         static void OnFileIDMesg(object sender, MesgEventArgs e)
@@ -145,7 +228,7 @@ namespace GarminTo
         public static void Main(string[] args)
         {
             // read FIT file test 
-            fitSource = new FileStream(@"D:\temp\fit-files\20150919-092010-1-1328-ANTFS-4-0.FIT", FileMode.Open);
+            fitSource = new FileStream(@"D:\temp\fit-files\20160101-090645-1-1328-ANTFS-4-0.FIT", FileMode.Open);
             var fitDecode = new FickleFrostbite.FIT.Decode();
             var mesgBroadcaster = new FickleFrostbite.FIT.MesgBroadcaster();
             fitDecode.MesgEvent += mesgBroadcaster.OnMesg;
